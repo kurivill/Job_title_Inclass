@@ -16,10 +16,36 @@ public class JobTitleDao {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     jobTitles.add(rs.getString("translation"));
-
-                }
+                } return jobTitles;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("Error executing query: " + e.getMessage());
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error preparing statement: " + e.getMessage());
+        } finally {
+            conn.close();
+        }
+    }
+
+    public void addOrUpdateTranslation(String language, String jobTitle, String translation) throws Exception {
+        Connection conn = MariaDbConnection.getConnection();
+
+        String sql = "insert into translations (language, job_title, translation) values (?, ?, ?) " +
+                "on duplicate key update translation = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, language);
+            ps.setString(2, jobTitle);
+            ps.setString(3, translation);
+            ps.setString(4, translation);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error preparing statement: " + e.getMessage());
+        } finally {
+            conn.close();
         }
     }
 }
