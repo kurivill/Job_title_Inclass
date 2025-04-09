@@ -10,11 +10,12 @@ public class JobTitleDao {
         Connection conn = MariaDbConnection.getConnection();
         ArrayList<String> jobTitles = new ArrayList<>();
 
-        String sql = "select job_title, translation from translations where language = ?";
+        String sql = "select key_name, translation from translations where language = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, language);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+                    System.out.println("Key name: " + rs.getString("key_name"));
                     jobTitles.add(rs.getString("translation"));
                 } return jobTitles;
             } catch (Exception e) {
@@ -25,15 +26,13 @@ public class JobTitleDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error preparing statement: " + e.getMessage());
-        } finally {
-            conn.close();
         }
     }
 
     public void addOrUpdateTranslation(String language, String jobTitle, String translation) throws Exception {
         Connection conn = MariaDbConnection.getConnection();
 
-        String sql = "insert into translations (language, job_title, translation) values (?, ?, ?) " +
+        String sql = "insert into translations (language, key_name, translation) values (?, ?, ?) " +
                 "on duplicate key update translation = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, language);
@@ -44,8 +43,6 @@ public class JobTitleDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error preparing statement: " + e.getMessage());
-        } finally {
-            conn.close();
         }
     }
 }

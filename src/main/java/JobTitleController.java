@@ -9,11 +9,16 @@ public class JobTitleController {
     }
 
     public ArrayList<String> getJobTitles(String language) throws Exception {
+        System.out.println(language);
         ArrayList<String> titles = jobTitleDao.getJobTitles(language);
+        for (String title : titles) {
+            System.out.println(title);
+        }
         return titles;
     }
 
-    public void addOrUpdateTranslation(String language, String jobTitle, String translation) throws Exception {
+    public ArrayList<String> addOrUpdateTranslation(String language, String jobTitle, String translation) throws Exception {
         jobTitleDao.addOrUpdateTranslation(language, jobTitle, translation);
+        return getJobTitles(language);
     }
 }

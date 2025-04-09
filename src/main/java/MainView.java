@@ -20,6 +20,17 @@ public class MainView extends Application {
         languageSelector.setOnAction(event -> {
             try {
                 String selectedLanguage = languageSelector.getValue();
+                switch (selectedLanguage) {
+                    case "English":
+                        selectedLanguage = "en";
+                        break;
+                    case "French":
+                        selectedLanguage = "fr";
+                        break;
+                    case "Chinese":
+                        selectedLanguage = "zh";
+                        break;
+                }
 
                 ArrayList<String> titles = controller.getJobTitles(selectedLanguage);
 
@@ -42,9 +53,20 @@ public class MainView extends Application {
         addButton.setOnAction(event -> {
             try {
                 String selectedLanguage = languageSelector.getValue();
+                switch (selectedLanguage) {
+                    case "English":
+                        selectedLanguage = "en";
+                        break;
+                    case "French":
+                        selectedLanguage = "fr";
+                        break;
+                    case "Chinese":
+                        selectedLanguage = "zh";
+                        break;
+                }
                 String word = wordField.getText();
                 String translation = translationField.getText();
-
+                System.out.println(selectedLanguage);
                 controller.addOrUpdateTranslation(selectedLanguage, word, translation);
 
                 ArrayList<String> titles = controller.getJobTitles(selectedLanguage);
